@@ -25,10 +25,12 @@ import (
 
 // SMARTDevice - short info about device
 type SMARTDevice struct {
-	device string
-	serial string
-	family string
-	model  string
+	device      string
+	device_type string
+	protocol    string
+	serial      string
+	family      string
+	model       string
 }
 
 // SMARTctl object
@@ -46,10 +48,12 @@ func NewSMARTctl(logger log.Logger, json gjson.Result, ch chan<- prometheus.Metr
 		json:   json,
 		logger: logger,
 		device: SMARTDevice{
-			device: strings.TrimPrefix(strings.TrimSpace(json.Get("device.name").String()), "/dev/"),
-			serial: strings.TrimSpace(json.Get("serial_number").String()),
-			family: strings.TrimSpace(json.Get("model_family").String()),
-			model:  strings.TrimSpace(json.Get("model_name").String()),
+			device:      strings.TrimPrefix(strings.TrimSpace(json.Get("device.name").String()), "/dev/"),
+			device_type: strings.TrimSpace(json.Get("device.type").String()),
+			protocol:    strings.TrimSpace(json.Get("device.protocol").String()),
+			serial:      strings.TrimSpace(json.Get("serial_number").String()),
+			family:      strings.TrimSpace(json.Get("model_family").String()),
+			model:       strings.TrimSpace(json.Get("model_name").String()),
 		},
 	}
 }
@@ -63,6 +67,7 @@ func (smart *SMARTctl) Collect() {
 	smart.mineInterfaceSpeed()
 	smart.mineDeviceAttribute()
 	smart.minePowerOnSeconds()
+	smart.mineScsiGrownDefectList()
 	smart.mineRotationRate()
 	smart.mineTemperatures()
 	smart.minePowerCycleCount()
@@ -90,6 +95,8 @@ func (smart *SMARTctl) mineExitStatus() {
 		prometheus.GaugeValue,
 		smart.json.Get("smartctl.exit_status").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -120,12 +127,16 @@ func (smart *SMARTctl) mineCapacity() {
 		prometheus.GaugeValue,
 		capacity.Get("blocks").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 	smart.ch <- prometheus.MustNewConstMetric(
 		metricDeviceCapacityBytes,
 		prometheus.GaugeValue,
 		capacity.Get("bytes").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 	for _, blockType := range []string{"logical", "physical"} {
 		smart.ch <- prometheus.MustNewConstMetric(
@@ -134,6 +145,8 @@ func (smart *SMARTctl) mineCapacity() {
 			smart.json.Get(fmt.Sprintf("%s_block_size", blockType)).Float(),
 			smart.device.device,
 			blockType,
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 	}
 }
@@ -148,6 +161,8 @@ func (smart *SMARTctl) mineInterfaceSpeed() {
 			tSpeed.Get("units_per_second").Float()*tSpeed.Get("bits_per_unit").Float(),
 			smart.device.device,
 			speedType,
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 	}
 }
@@ -181,6 +196,8 @@ func (smart *SMARTctl) mineDeviceAttribute() {
 				flagsLong,
 				key,
 				id,
+				smart.device.device_type,
+				smart.device.protocol,
 			)
 		}
 	}
@@ -193,7 +210,22 @@ func (smart *SMARTctl) minePowerOnSeconds() {
 		prometheus.CounterValue,
 		GetFloatIfExists(pot, "hours", 0)*60*60+GetFloatIfExists(pot, "minutes", 0)*60,
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
+}
+
+func (smart *SMARTctl) mineScsiGrownDefectList() {
+	if smart.device.device_type == "scsi" {
+		smart.ch <- prometheus.MustNewConstMetric(
+			metricScsiGrownDefectList,
+			prometheus.GaugeValue,
+			smart.json.Get("scsi_grown_defect_list").Float(),
+			smart.device.device,
+			smart.device.device_type,
+			smart.device.protocol,
+		)
+	}
 }
 
 func (smart *SMARTctl) mineRotationRate() {
@@ -204,6 +236,8 @@ func (smart *SMARTctl) mineRotationRate() {
 			prometheus.GaugeValue,
 			rRate,
 			smart.device.device,
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 	}
 }
@@ -218,6 +252,8 @@ func (smart *SMARTctl) mineTemperatures() {
 				value.Float(),
 				smart.device.device,
 				key.String(),
+				smart.device.device_type,
+				smart.device.protocol,
 			)
 			return true
 		})
@@ -230,6 +266,8 @@ func (smart *SMARTctl) minePowerCycleCount() {
 		prometheus.CounterValue,
 		smart.json.Get("power_cycle_count").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -241,6 +279,8 @@ func (smart *SMARTctl) mineDeviceSCTStatus() {
 			prometheus.GaugeValue,
 			status.Get("device_state").Float(),
 			smart.device.device,
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 	}
 }
@@ -251,6 +291,8 @@ func (smart *SMARTctl) minePercentageUsed() {
 		prometheus.CounterValue,
 		smart.json.Get("nvme_smart_health_information_log.percentage_used").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -260,6 +302,8 @@ func (smart *SMARTctl) mineAvailableSpare() {
 		prometheus.CounterValue,
 		smart.json.Get("nvme_smart_health_information_log.available_spare").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -269,6 +313,8 @@ func (smart *SMARTctl) mineAvailableSpareThreshold() {
 		prometheus.CounterValue,
 		smart.json.Get("nvme_smart_health_information_log.available_spare_threshold").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -278,6 +324,8 @@ func (smart *SMARTctl) mineCriticalWarning() {
 		prometheus.CounterValue,
 		smart.json.Get("nvme_smart_health_information_log.critical_warning").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -287,6 +335,8 @@ func (smart *SMARTctl) mineMediaErrors() {
 		prometheus.CounterValue,
 		smart.json.Get("nvme_smart_health_information_log.media_errors").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -296,6 +346,8 @@ func (smart *SMARTctl) mineNumErrLogEntries() {
 		prometheus.CounterValue,
 		smart.json.Get("nvme_smart_health_information_log.num_err_log_entries").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -306,6 +358,8 @@ func (smart *SMARTctl) mineBytesRead() {
 		prometheus.CounterValue,
 		smart.json.Get("nvme_smart_health_information_log.data_units_read").Float()*blockSize,
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -316,6 +370,8 @@ func (smart *SMARTctl) mineBytesWritten() {
 		prometheus.CounterValue,
 		smart.json.Get("nvme_smart_health_information_log.data_units_written").Float()*blockSize,
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -325,6 +381,8 @@ func (smart *SMARTctl) mineSmartStatus() {
 		prometheus.GaugeValue,
 		smart.json.Get("smart_status.passed").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -354,6 +412,8 @@ func (smart *SMARTctl) mineDeviceStatistics() {
 					"supports_dsn",
 					"monitored_condition_met",
 				}),
+				smart.device.device_type,
+				smart.device.protocol,
 			)
 		}
 	}
@@ -368,6 +428,8 @@ func (smart *SMARTctl) mineDeviceStatistics() {
 			strings.TrimSpace(statistic.Get("name").String()),
 			"V---",
 			"valid",
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 	}
 }
@@ -390,6 +452,8 @@ func (smart *SMARTctl) mineDeviceStatus() {
 		prometheus.GaugeValue,
 		status.Get("passed").Float(),
 		smart.device.device,
+		smart.device.device_type,
+		smart.device.protocol,
 	)
 }
 
@@ -401,6 +465,8 @@ func (smart *SMARTctl) mineDeviceErrorLog() {
 			status.Get("count").Float(),
 			smart.device.device,
 			logType,
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 	}
 }
@@ -413,6 +479,8 @@ func (smart *SMARTctl) mineDeviceSelfTestLog() {
 			status.Get("count").Float(),
 			smart.device.device,
 			logType,
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 		smart.ch <- prometheus.MustNewConstMetric(
 			metricDeviceSelfTestLogErrorCount,
@@ -420,6 +488,8 @@ func (smart *SMARTctl) mineDeviceSelfTestLog() {
 			status.Get("error_count_total").Float(),
 			smart.device.device,
 			logType,
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 	}
 }
@@ -432,6 +502,8 @@ func (smart *SMARTctl) mineDeviceERC() {
 			status.Get("deciseconds").Float()/10.0,
 			smart.device.device,
 			ercType,
+			smart.device.device_type,
+			smart.device.protocol,
 		)
 	}
 }
