@@ -52,6 +52,8 @@ var (
 		"Device capacity in blocks",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -60,6 +62,8 @@ var (
 		"Device capacity in bytes",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -69,6 +73,8 @@ var (
 		[]string{
 			"device",
 			"blocks_type",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -78,6 +84,8 @@ var (
 		[]string{
 			"device",
 			"speed_type",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -91,6 +99,8 @@ var (
 			"attribute_flags_long",
 			"attribute_value_type",
 			"attribute_id",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -99,6 +109,18 @@ var (
 		"Device power on seconds",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
+		},
+		nil,
+	)
+	metricScsiGrownDefectList = prometheus.NewDesc(
+		"smartctl_scsi_grown_defect_list",
+		"number of scsi grown defects",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -107,6 +129,8 @@ var (
 		"Device rotation rate",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -116,6 +140,8 @@ var (
 		[]string{
 			"device",
 			"temperature_type",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -124,6 +150,8 @@ var (
 		"Device power cycle count",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -132,6 +160,8 @@ var (
 		"Device write percentage used",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -140,6 +170,8 @@ var (
 		"Normalized percentage (0 to 100%) of the remaining spare capacity available",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -148,6 +180,8 @@ var (
 		"When the Available Spare falls below the threshold indicated in this field, an asynchronous event completion may occur. The value is indicated as a normalized percentage (0 to 100%)",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -156,6 +190,8 @@ var (
 		"This field indicates critical warnings for the state of the controller",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -164,6 +200,8 @@ var (
 		"Contains the number of occurrences where the controller detected an unrecovered data integrity error. Errors such as uncorrectable ECC, CRC checksum failure, or LBA tag mismatch are included in this field",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -172,6 +210,8 @@ var (
 		"Contains the number of Error Information log entries over the life of the controller",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -180,6 +220,8 @@ var (
 		"",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -188,6 +230,8 @@ var (
 		"",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -196,6 +240,8 @@ var (
 		"General smart status",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -204,6 +250,8 @@ var (
 		"Exit status of smartctl on device",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -212,6 +260,8 @@ var (
 		"Device state (0=active, 1=standby, 2=sleep, 3=dst, 4=offline, 5=sct)",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -224,6 +274,8 @@ var (
 			"statistic_name",
 			"statistic_flags_short",
 			"statistic_flags_long",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -232,6 +284,8 @@ var (
 		"Device status",
 		[]string{
 			"device",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -241,6 +295,8 @@ var (
 		[]string{
 			"device",
 			"error_log_type",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -250,6 +306,8 @@ var (
 		[]string{
 			"device",
 			"self_test_log_type",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -259,6 +317,8 @@ var (
 		[]string{
 			"device",
 			"self_test_log_type",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
@@ -268,6 +328,8 @@ var (
 		[]string{
 			"device",
 			"op_type",
+			"device_type",
+			"protocol",
 		},
 		nil,
 	)
