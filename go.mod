@@ -1,6 +1,6 @@
-module github.com/prometheus-community/smartctl_exporter
+module github.com/jeffmontagna/smartctl_exporter
 
-go 1.19
+go 1.20
 
 require (
 	github.com/alecthomas/kingpin/v2 v2.3.2

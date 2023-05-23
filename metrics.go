@@ -116,12 +116,160 @@ var (
 	)
 	metricScsiGrownDefectList = prometheus.NewDesc(
 		"smartctl_scsi_grown_defect_list",
-		"number of scsi grown defects",
+		"Number of SCSI grown defects",
 		[]string{
 			"device",
 			"device_type",
 			"protocol",
 		},
+		nil,
+	)
+	metricScsiReadErrorsCorrectedByEccFast = prometheus.NewDesc(
+		"smartctl_read_errors_corrected_by_eccfast",
+		"Number of SCSI Read Errors Corrected by ECC Fast",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+
+		nil,
+	)
+	metricScsiReadErrorsCorrectedByEccDelayed = prometheus.NewDesc(
+		"smartctl_read_errors_corrected_by_delayed",
+		"Number of SCSI Read Errors Corrected by ECC Delayed",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+
+		nil,
+	)
+	metricScsiReadErrorsCorrectedByReReadsReWrites = prometheus.NewDesc(
+		"smartctl_read_errors_corrected_by_rereads_rewrites",
+		"Number of SCSI Read Errors Corrected by Rereads or Rewrites",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+		nil,
+	)
+	metricScsiReadTotalErrorsCorrected = prometheus.NewDesc(
+		"smartctl_scsi_read_total_errors_correcte",
+		"Number of SCSI Read Total Corrected Errors",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+		nil,
+	)
+	metricScsiReadTotalUncorrectedErrors = prometheus.NewDesc(
+		"smartctl_scsi_read_total_uncorrected_errors",
+		"Number of SCSI Read Total Uncorrected Errors",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+		nil,
+	)
+	metricScsiReadGigabytesProcessed = prometheus.NewDesc(
+		"smartctl_read_gigabytes_processed",
+		"SCSI Read Gigabytes Processed",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+
+		nil,
+	)
+	metricScsiReadCorrectionAlgorithmInvocations = prometheus.NewDesc(
+		"smartctl_read_correction_algorithm_invocations",
+		"Number of SCSI Read Correction Algorithm Invocations",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+
+		nil,
+	)
+	metricScsiWriteErrorsCorrectedByReReadsReWrites = prometheus.NewDesc(
+		"smartctl_scsi_write_errors_corrected_by_rereads_rewrites",
+		"Number of SCSI Write Errors Corrected by Rereads or Rewrites",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+		nil,
+	)
+	metricScsiWriteTotalUncorrectedErrors = prometheus.NewDesc(
+		"smartctl_scsi_write_total_uncorrected_errors",
+		"Number of SCSI Write Total Uncorrected Errors",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+		nil,
+	)
+	metricScsiWriteTotalErrorsCorrected = prometheus.NewDesc(
+		"smartctl_scsi_write_total_errors_correcte",
+		"Number of SCSI Write Total Corrected Errors",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+		nil,
+	)
+	metricScsiWriteErrorsCorrectedByEccFast = prometheus.NewDesc(
+		"smartctl_write_errors_corrected_by_eccfast",
+		"Number of SCSI Write Errors Corrected by ECC Fast",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+
+		nil,
+	)
+	metricScsiWriteErrorsCorrectedByEccDelayed = prometheus.NewDesc(
+		"smartctl_write_errors_corrected_by_delayed",
+		"Number of SCSI Write Errors Corrected by ECC Delayed",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+
+		nil,
+	)
+	metricScsiWriteGigabytesProcessed = prometheus.NewDesc(
+		"smartctl_write_gigabytes_processed",
+		"SCSI Write Gigabytes Processed",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+
+		nil,
+	)
+	metricScsiWriteCorrectionAlgorithmInvocations = prometheus.NewDesc(
+		"smartctl_write_correction_algorithm_invocations",
+		"Number of SCSI Write Correction Algorithm Invocations",
+		[]string{
+			"device",
+			"device_type",
+			"protocol",
+		},
+
 		nil,
 	)
 	metricDeviceRotationRate = prometheus.NewDesc(

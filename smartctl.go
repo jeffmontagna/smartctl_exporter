@@ -68,6 +68,7 @@ func (smart *SMARTctl) Collect() {
 	smart.mineDeviceAttribute()
 	smart.minePowerOnSeconds()
 	smart.mineScsiGrownDefectList()
+	smart.mineScsiErrorCounterLog()
 	smart.mineRotationRate()
 	smart.mineTemperatures()
 	smart.minePowerCycleCount()
@@ -225,6 +226,126 @@ func (smart *SMARTctl) mineScsiGrownDefectList() {
 			smart.device.device_type,
 			smart.device.protocol,
 		)
+	}
+}
+
+func (smart *SMARTctl) mineScsiErrorCounterLog() {
+	if smart.device.device_type == "scsi" {
+		ScsiErrorCounterLog := smart.json.Get("scsi_error_counter_log")
+		if ScsiErrorCounterLog.Exists() {
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiReadErrorsCorrectedByEccFast,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("read.errors_corrected_by_eccfast").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiReadErrorsCorrectedByEccDelayed,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("read.errors_corrected_by_eccdelayed").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiReadErrorsCorrectedByReReadsReWrites,
+				prometheus.CounterValue,
+				ScsiErrorCounterLog.Get("read.errors_corrected_by_rereads_rewrites").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiReadTotalErrorsCorrected,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("read.total_errors_corrected").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiReadCorrectionAlgorithmInvocations,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("read.correction_algorithm_invocations").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiReadTotalUncorrectedErrors,
+				prometheus.CounterValue,
+				ScsiErrorCounterLog.Get("read.total_uncorrected_errors").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiReadGigabytesProcessed,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("read.gigabytes_processed").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiWriteErrorsCorrectedByEccFast,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("write.errors_corrected_by_eccfast").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiWriteErrorsCorrectedByEccDelayed,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("write.errors_corrected_by_delayed").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiWriteErrorsCorrectedByReReadsReWrites,
+				prometheus.CounterValue,
+				ScsiErrorCounterLog.Get("write.errors_corrected_by_rereads_rewrites").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiWriteTotalErrorsCorrected,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("write.total_errors_corrected").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiWriteGigabytesProcessed,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("write.gigabytes_processed").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiWriteCorrectionAlgorithmInvocations,
+				prometheus.GaugeValue,
+				ScsiErrorCounterLog.Get("write.correction_algorithm_invocations").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+			smart.ch <- prometheus.MustNewConstMetric(
+				metricScsiWriteTotalUncorrectedErrors,
+				prometheus.CounterValue,
+				ScsiErrorCounterLog.Get("write.total_uncorrected_errors").Float(),
+				smart.device.device,
+				smart.device.device_type,
+				smart.device.protocol,
+			)
+		}
 	}
 }
 
