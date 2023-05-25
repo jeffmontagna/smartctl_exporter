@@ -38,8 +38,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goversion: ${{ matrix.go-version }}
-          project_path: "./build/${{ matrix.goos }}-${{ matrix.goarch }}/"
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
           binary_name: "smartctl_exporter"
-          build_command: "make"
-          build_flags: "build"
-          extra_files: LICENSE
+          extra_files: LICENSE README.md
