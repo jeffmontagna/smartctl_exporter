@@ -1,3 +1,20 @@
+# CHANGELOG
+
+## 0.10.2 / 2023-05-24
+
+[CHANGE] Added `--all` to smartcl call to get `scsi_error_counter_log` in json output
+[CHANGE] Changed ScsiWriteTotalUncorrectedErrors from Counter to Gauge
+
+## 0.10.1 / 2023-05-23
+
+* [FEATURE] Added SCSI Error Metrics
+* [CHANGE] Updated CI to use GitLab Runners
+
+## 0.10.0 / 2023-05-12
+
+* [FEATURE] Added SCSI Grown Defect Metrics
+* [CHANGE] Updated CI to use GitLab Runners
+
 ## 0.9.1 / 2022-11-06
 
 * [BUGFIX] Fix runtime error: index out of range in mineVersion #93

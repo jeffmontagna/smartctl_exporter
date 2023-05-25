@@ -53,22 +53,11 @@ docker-publish: build
 	@docker build -t "$(DOCKER_REPO)/$(DOCKER_IMAGE_NAME):$(GIT_TAG_NAME)" --build-arg BIN_DIR=$(BIN_DIR) .
 	@docker push $(DOCKER_REPO)/$(DOCKER_IMAGE_NAME):$(GIT_TAG_NAME)
 
-release: promu github-release
-	@echo ">> pushing binary to github with ghr"
-	@$(PROMU) crossbuild tarballs
-	@$(PROMU) release .tarballs
-
 promu:
 	@GOOS=$(GOOS) \
 	GOARCH=$(GOARCH) \
 	$(GO) install github.com/prometheus/promu@v0.14.0
 PROMU=$(shell go env GOPATH)/bin/promu
-
-github-release:
-	@GOOS=$(GOOS) \
-	GOARCH=$(GOARCH) \
-	$(GO) install github.com/github-release/github-release@v0.10.0
-	$(GO) mod tidy
 
 # Run go fmt against code
 .PHONY: fmt
