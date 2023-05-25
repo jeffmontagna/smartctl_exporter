@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.10.4 / 2023-05-25
+
+* Updating Release CI
+
 ## 0.10.3 / 2023-05-25
 
 [CHANGE] Changed ScsiReadTotalUncorrectedErrors and ScsiReadErrorsCorrectedByReReadsReWrites metrics from Counter to Gauge
