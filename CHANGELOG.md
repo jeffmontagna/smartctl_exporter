@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.10.3 / 2023-05-25
+
+[CHANGE] Changed ScsiReadTotalUncorrectedErrors and ScsiReadErrorsCorrectedByReReadsReWrites metrics from Counter to Gauge
+
 ## 0.10.2 / 2023-05-24
 
 [CHANGE] Added `--all` to smartcl call to get `scsi_error_counter_log` in json output

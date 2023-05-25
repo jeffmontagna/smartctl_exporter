@@ -251,7 +251,7 @@ func (smart *SMARTctl) mineScsiErrorCounterLog() {
 			)
 			smart.ch <- prometheus.MustNewConstMetric(
 				metricScsiReadErrorsCorrectedByReReadsReWrites,
-				prometheus.CounterValue,
+				prometheus.GaugeValue,
 				ScsiErrorCounterLog.Get("read.errors_corrected_by_rereads_rewrites").Float(),
 				smart.device.device,
 				smart.device.device_type,
@@ -275,7 +275,7 @@ func (smart *SMARTctl) mineScsiErrorCounterLog() {
 			)
 			smart.ch <- prometheus.MustNewConstMetric(
 				metricScsiReadTotalUncorrectedErrors,
-				prometheus.CounterValue,
+				prometheus.GaugeValue,
 				ScsiErrorCounterLog.Get("read.total_uncorrected_errors").Float(),
 				smart.device.device,
 				smart.device.device_type,
@@ -307,7 +307,7 @@ func (smart *SMARTctl) mineScsiErrorCounterLog() {
 			)
 			smart.ch <- prometheus.MustNewConstMetric(
 				metricScsiWriteErrorsCorrectedByReReadsReWrites,
-				prometheus.CounterValue,
+				prometheus.GaugeValue,
 				ScsiErrorCounterLog.Get("write.errors_corrected_by_rereads_rewrites").Float(),
 				smart.device.device,
 				smart.device.device_type,
