@@ -157,7 +157,7 @@ var (
 		nil,
 	)
 	metricScsiReadTotalErrorsCorrected = prometheus.NewDesc(
-		"smartctl_scsi_read_total_errors_correcte",
+		"smartctl_scsi_read_total_errors_corrected",
 		"Number of SCSI Read Total Corrected Errors",
 		[]string{
 			"device",

@@ -339,7 +339,7 @@ func (smart *SMARTctl) mineScsiErrorCounterLog() {
 			)
 			smart.ch <- prometheus.MustNewConstMetric(
 				metricScsiWriteTotalUncorrectedErrors,
-				prometheus.CounterValue,
+				prometheus.GaugeValue,
 				ScsiErrorCounterLog.Get("write.total_uncorrected_errors").Float(),
 				smart.device.device,
 				smart.device.device_type,

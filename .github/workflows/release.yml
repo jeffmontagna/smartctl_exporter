@@ -11,6 +11,8 @@ jobs:
     strategy:
       max-parallel: 3
       matrix:
+        goos: [linux]
+        goarch: [amd64]
         go-version: [ 1.20.x ]
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
@@ -32,4 +34,12 @@ jobs:
       - name: Publish Docker Image
         run: make docker-publish
       - name: Release Binary
-        run: make release
+        uses: wangyoucao577/go-release-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          goversion: ${{ matrix.go-version }}
+          project_path: "./build/${{ matrix.goos }}-${{ matrix.goarch }}/"
+          binary_name: "smartctl_exporter"
+          build_command: "make"
+          build_flags: "build"
+          extra_files: LICENSE
