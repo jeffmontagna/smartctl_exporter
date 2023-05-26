@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.10.6 / 2023-05-25
+
+* Updating Release CI
+
 ## 0.10.5 / 2023-05-26
 
 * Added `_scsi_` prefix to SCSI metrics that did not include it.

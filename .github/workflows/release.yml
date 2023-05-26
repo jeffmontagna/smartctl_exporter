@@ -40,7 +40,6 @@ jobs:
           goversion: ${{ matrix.go-version }}
           goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
-          build_command: "make"
-          build_flags: "build-release"
+          build_command: "make build-release"
           binary_name: "smartctl_exporter"
           extra_files: LICENSE README.md
