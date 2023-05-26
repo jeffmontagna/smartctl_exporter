@@ -36,6 +36,11 @@ build: promu
 	@$(GO) mod vendor
 	@$(PROMU) build --prefix=$(BIN_DIR)
 
+build-release: promu
+	@echo ">> building binaries $(GOOS)-$(GOARCH)"
+	@$(GO) mod vendor
+	@$(PROMU) build --prefix="."
+
 crossbuild: promu
 	@echo ">> crossbuilding binaries"
 	@$(PROMU) crossbuild --go=1.20
