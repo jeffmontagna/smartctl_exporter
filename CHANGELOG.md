@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.10.5 / 2023-05-26
+
+* Added `_scsi_` prefix to SCSI metrics that did not include it.
+* Fixed typo in metric name form `smartctl_scsi_write_total_errors_correcte` to `smartctl_scsi_write_total_errors_corrected`
+
 ## 0.10.4 / 2023-05-25
 
 * Updating Release CI
